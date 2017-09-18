@@ -73,7 +73,9 @@ public class CamelEditorTest extends DefaultTest {
 
 		new WorkbenchShell();
 		ProjectFactory.newProject("cbr").template(ProjectTemplate.CBR).type(ProjectType.SPRING).create();
-		new LogView().deleteLog();
+		LogView view = new LogView();
+		view.open();
+		view.deleteLog();
 	}
 
 	@Before

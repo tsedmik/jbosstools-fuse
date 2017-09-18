@@ -22,6 +22,7 @@ import java.util.Properties;
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.direct.preferences.Preferences;
 import org.eclipse.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
@@ -29,7 +30,7 @@ import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.swt.impl.text.LabeledText;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
-import org.eclipse.reddeer.workbench.core.condition.JobIsKilled;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.Activator;
 import org.jboss.tools.fuse.qe.reddeer.condition.TreeHasItem;
@@ -144,7 +145,7 @@ public class ServerKaraf extends ServerBase {
 		runtimeWizard.setInstallationDir(getHome());
 		runtimeWizard.selectJre(getJreName());
 		runtimeWizard.selectExecutionEnvironment(getExecEnv());
-		new WaitUntil(new JobIsKilled("Refreshing server adapter list"), TimePeriod.LONG, false);
+		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
 		runtimeWizard.finish(TimePeriod.VERY_LONG);
 
 		preferences.ok();
@@ -161,7 +162,7 @@ public class ServerKaraf extends ServerBase {
 		serverWizard.setPort(getPort());
 		serverWizard.setUsername(getUsername());
 		serverWizard.setPassword(getPassword());
-		new WaitUntil(new JobIsKilled("Refreshing server adapter list"), TimePeriod.LONG, false);
+		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
 		serverWizard.finish();
 
 		// Set ssh home
