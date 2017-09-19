@@ -71,7 +71,8 @@ public class LicenseTest {
 			}
 		}
 		new PushButton("Close").click();
-		;
+		new DefaultShell("About Red Hat JBoss Developer Studio");
+		new PushButton("Close").click();
 		return fusePlugins;
 	}
 
@@ -98,6 +99,8 @@ public class LicenseTest {
 
 		new PushButton("Apply and Close").click();
 		new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
+		new PushButton("Close").click();
+		new DefaultShell("About Red Hat JBoss Developer Studio");
 		new PushButton("Close").click();
 	}
 
