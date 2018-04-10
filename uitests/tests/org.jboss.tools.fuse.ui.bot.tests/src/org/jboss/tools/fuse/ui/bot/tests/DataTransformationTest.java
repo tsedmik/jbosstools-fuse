@@ -82,10 +82,10 @@ public class DataTransformationTest extends DefaultTest {
 		wizard.setTargetType(TransformationType.JSON);
 		wizard.next();
 		wizard.setXMLTypeDefinition(TypeDefinition.Schema);
-		wizard.setXMLSourceFile("abc-order.xsd");
+		wizard.setXMLSourceFile("abc-order.xsd - starter/src/main/resources");
 		wizard.next();
 		wizard.setJSONTypeDefinition(TypeDefinition.Schema);
-		wizard.setJSONTargetFile("xyz-order.json");
+		wizard.setJSONTargetFile("xyz-order.json - starter/src/data");
 		wizard.finish();
 		editor.activate();
 		editor.addCamelComponent("File", "ref:xml2json");

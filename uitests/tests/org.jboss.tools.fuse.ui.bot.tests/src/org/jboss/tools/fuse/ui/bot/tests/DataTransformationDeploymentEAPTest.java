@@ -51,14 +51,16 @@ import org.junit.runner.RunWith;
 @Fuse(state = RUNNING)
 public class DataTransformationDeploymentEAPTest extends DefaultTest {
 
+	public static final String PROJECT_NAME = "test-datatransformation-on-eap";
+	public static final String PROJECT_LOCATION = "resources/projects/test-datatransformation-on-eap";
+
 	@InjectRequirement
 	private static FuseRequirement serverRequirement;
-	
+
 	@RequirementRestriction
 	public static RequirementMatcher getRestrictionMatcher() {
 		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerEAP.class));
 	}
-
 
 	/**
 	 * Cleans up test environment
@@ -78,7 +80,7 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 	 * <b>Steps</b>
 	 * <ol>
 	 * <li>start Red Hat Fuse on EAP</li>
-	 * <li>import 'wildfly-transformation' project from 'resources/projects/datatrans'</li>
+	 * <li>import 'test-datatransformation-on-eap' project from 'resources/projects/test-datatransformation-on-eap'</li>
 	 * <li>deploy the project</li>
 	 * <li>invoke the route with copying a file</li>
 	 * <li>check whether transformation was successful - output directory contains a file with correctly transformed
@@ -89,21 +91,21 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 	public void testDeployment() throws FileNotFoundException {
 
 		// import and deploy the project
-		ProjectFactory.importExistingProject(ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID,
-				"resources/projects/datatrans"), "wildfly-transformation", false);
-		new CamelProject("wildfly-transformation").update();
-		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "wildfly-transformation");
+		ProjectFactory.importExistingProject(
+				ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, PROJECT_LOCATION), PROJECT_NAME, false);
+		new CamelProject(PROJECT_NAME).update();
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), PROJECT_NAME);
 		try {
 			new WaitUntil(new ConsoleHasText(
 					"started and consuming from: Endpoint[file://src/data?fileName=abc-order.xml&noop=true]"));
-			new WaitUntil(new ConsoleHasText("Deployed \"wildfly-transformation.war\""));
+			new WaitUntil(new ConsoleHasText("Deployed \"camel-test-spring.war\""));
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Project was not sucessfully deployed!");
 		}
 
 		// invoke the route with copying a file
 		String from = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID,
-				"resources/projects/datatrans/src/data/abc-order.xml");
+				"resources/projects/test-datatransformation-on-eap/src/data/abc-order.xml");
 		String to = serverRequirement.getConfiguration().getServer().getHome() + "/bin/src/data/abc-order.xml";
 		try {
 			Files.copy(new File(from).toPath(), new File(to).toPath(), REPLACE_EXISTING);

@@ -68,7 +68,7 @@ public class LicenseTest {
 		new DefaultTabItem(shell, "Installed Software").activate();
 		List<String> fusePlugins = new ArrayList<String>();
 		for (TreeItem item : new DefaultTree(shell).getItems()) {
-			if (item.getText().startsWith("Red Hat Fuse Tools")) {
+			if (item.getText().startsWith("Red Hat Fuse")) {
 				fusePlugins.add(item.getText());
 			}
 		}

@@ -38,7 +38,6 @@ import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.preference.ConsolePreferenceUtil;
-import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
 import org.jboss.tools.fuse.reddeer.runtime.ServerTypeMatcher;
@@ -87,8 +86,6 @@ public class RouteManipulationServerTest {
 		new LogView().setActivateOnNewEvents(false);
 		ProjectFactory.importExistingProject(ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID,
 				"resources/projects/test-route-manipulation"), "test-route-manipulation", false);
-		CamelProject project = new CamelProject("test-route-manipulation");
-		project.update();
 	}
 
 	@Before
@@ -154,8 +151,8 @@ public class RouteManipulationServerTest {
 	public void testRemoteRouteEditing() {
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.refreshLocalProcesses();
-		jmx.getNode("Local Processes", "Red Hat Fuse", "Camel");
-		TreeItem jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
+		jmx.getNode("Local Processes", "karaf", "Camel");
+		TreeItem jmxNode = jmx.getNode("Local Processes", "karaf", "Camel", "_context1");
 		jmxNode.select();
 		new ContextMenu(jmxNode).getItem("Edit Routes").select();
 		CamelEditor editor = new CamelEditor(new DefaultEditor(new RegexMatcher("<connected>Remote CamelContext:.*")).getTitle());
@@ -166,13 +163,13 @@ public class RouteManipulationServerTest {
 		editor.setProperty("Message *", "AAA-BBB-CCC");
 		editor.save();
 		assertTrue(new FuseShellSSH().containsLog("AAA-BBB-CCC"));
-		assertNotNull(jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer", "SetBody _setBody1", "Choice", "Otherwise", "Log _log2"));
+		assertNotNull(jmx.getNode("Local Processes", "karaf", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer", "SetBody _setBody1", "Choice", "Otherwise", "Log _log2"));
 		editor.activate();
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/blueprint-route-edit.xml");
 		CamelEditor.switchTab("Design");
 		jmx.refreshLocalProcesses();
-		assertNull(jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer", "SetBody _setBody1", "Choice", "Otherwise"));
+		assertNull(jmx.getNode("Local Processes", "karaf", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer", "SetBody _setBody1", "Choice", "Otherwise"));
 		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 
@@ -197,13 +194,13 @@ public class RouteManipulationServerTest {
 	public void testTracing() {
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.refreshLocalProcesses();
-		jmx.getNode("Local Processes", "Red Hat Fuse", "Camel");
+		jmx.getNode("Local Processes", "karaf", "Camel");
 		AbstractWait.sleep(TimePeriod.DEFAULT);
-		TreeItem jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
+		TreeItem jmxNode = jmx.getNode("Local Processes", "karaf", "Camel", "_context1");
 		jmxNode.select();
 		new ContextMenu(jmxNode).getItem("Start Tracing").select();
 		AbstractWait.sleep(TimePeriod.getCustom(3));
-		jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
+		jmxNode = jmx.getNode("Local Processes", "karaf", "Camel", "_context1");
 		jmxNode.select();
 		new ContextMenu(jmxNode).getItem("Stop Tracing Context").select();;
 		MessagesView msg = new MessagesView();

@@ -35,7 +35,6 @@ import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.condition.FuseLogContainsText;
 import org.jboss.tools.fuse.reddeer.preference.ConsolePreferencePage;
-import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
 import org.jboss.tools.fuse.reddeer.runtime.ServerTypeMatcher;
@@ -133,11 +132,9 @@ public class QuickStartsTest {
 		String quickstart = serverRequirement.getConfiguration().getServer().getHome() + "/quickstarts/beginner/camel-cbr";
 		MavenImportWizard.importProject(quickstart);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-		CamelProject project = new CamelProject("beginner-camel-cbr");
-		project.enableCamelNature();
 		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "beginner-camel-cbr");
 		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: cbr-example-context) started"));
+			new WaitUntil(new FuseLogContainsText("(CamelContext: cbr-example-context) started"), TimePeriod.getCustom(600));
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Project 'beginner-camel-cbr' was not sucessfully deployed!");
 		}
@@ -164,11 +161,9 @@ public class QuickStartsTest {
 				+ "/quickstarts/beginner/camel-eips";
 		MavenImportWizard.importProject(quickstart);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-		CamelProject project = new CamelProject("beginner-camel-eips");
-		project.enableCamelNature();
 		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "beginner-camel-eips");
 		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: eip-example-context) started"));
+			new WaitUntil(new FuseLogContainsText("(CamelContext: eip-example-context) started"), TimePeriod.getCustom(600));
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Project 'beginner-camel-eips' was not sucessfully deployed!");
 		}
@@ -195,11 +190,9 @@ public class QuickStartsTest {
 				+ "/quickstarts/beginner/camel-errorhandler";
 		MavenImportWizard.importProject(quickstart);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-		CamelProject project = new CamelProject("beginner-camel-errorhandler");
-		project.enableCamelNature();
 		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "beginner-camel-errorhandler");
 		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: errors-example-context) started"));
+			new WaitUntil(new FuseLogContainsText("(CamelContext: errors-example-context) started"), TimePeriod.getCustom(600));
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Project 'beginner-camel-errorhandler' was not sucessfully deployed!");
 		}
@@ -225,11 +218,9 @@ public class QuickStartsTest {
 		String quickstart = serverRequirement.getConfiguration().getServer().getHome() + "/quickstarts/beginner/camel-log";
 		MavenImportWizard.importProject(quickstart);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-		CamelProject project = new CamelProject("beginner-camel-log");
-		project.enableCamelNature();
 		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "beginner-camel-log");
 		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: log-example-context) started"));
+			new WaitUntil(new FuseLogContainsText("(CamelContext: log-example-context) started"), TimePeriod.getCustom(600));
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Project 'beginner-camel-log' was not sucessfully deployed!");
 		}
