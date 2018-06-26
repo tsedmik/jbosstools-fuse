@@ -25,7 +25,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
 import org.eclipse.reddeer.common.matcher.RegexMatcher;
 import org.eclipse.reddeer.common.util.XPathEvaluator;
 import org.eclipse.reddeer.common.wait.AbstractWait;
@@ -89,34 +88,8 @@ public class CamelProject {
 	}
 
 	public void runCamelContext() {
-
-		getProject().getProjectItem("Camel Contexts").getChildren().get(0).select();
-		try {
-			new ContextMenuItem("Run As", "2 Local Camel Context").select();
-		} catch (CoreLayerException ex) {
-			new ContextMenuItem("Run As", "1 Local Camel Context").select();
-		}
-
-		ConsoleHasText camel = new ConsoleHasText("Starting Camel ...");
-		ConsoleHasText jetty = new ConsoleHasText("Started Jetty Server");
-		ConsoleHasText failure = new ConsoleHasText("BUILD FAILURE");
-		boolean started = false;
-		for (int i = 0; i < 300; i++) {
-			if (camel.test() || jetty.test()) {
-				started = true;
-				break;
-			}
-			if (failure.test()) {
-				break;
-			}
-			AbstractWait.sleep(TimePeriod.SHORT);
-		}
-		if (!started) {
-			new WaitTimeoutExpiredException("Console doesn't contains 'Starting Camel ...' or 'Started Jetty Server'");
-		}
-
-		AbstractWait.sleep(TimePeriod.DEFAULT);
-		new WaitUntil(new ConsoleHasText("started and consuming from"), TimePeriod.VERY_LONG);
+		getProject().runAs("Local Camel Context");
+		new WaitUntil(new ConsoleHasText("started and consuming from"), TimePeriod.getCustom(600));
 	}
 
 	public void runCamelContextWithoutTests(String name) {
@@ -124,7 +97,7 @@ public class CamelProject {
 		String id = getCamelContextId("src/main/resources", "META-INF", "spring", name);
 		getProject().getProjectItem("src/main/resources", "META-INF", "spring", name).select();
 		new ContextMenuItem("Run As", "3 Local Camel Context (without tests)").select();
-		new WaitUntil(new ConsoleHasText("(CamelContext: " + id + ") started"), TimePeriod.VERY_LONG);
+		new WaitUntil(new ConsoleHasText("(CamelContext: " + id + ") started"), TimePeriod.getCustom(600));
 	}
 
 	public void debugCamelContextWithoutTests(String name) {
