@@ -45,9 +45,9 @@ import org.jboss.tools.fuse.reddeer.wizard.NewFuseTransformationWizard.TypeDefin
  */
 public class DataTransformationDefaultTest extends DefaultTest {
 
-	public static final String DEPLOYMENT_TYPE = System.getProperty("fuseDeploymentType", "OpenShift");
-	public static final String RUNTIME_TYPE = System.getProperty("fuseRuntimeType", "SpringBoot");
-	public static final String CAMEL_VERSION = System.getProperty("fuseCamelVersion", "2.17.0.redhat-630343");
+	public static String DEPLOYMENT_TYPE = System.getProperty("fuseDeploymentType", "OpenShift");
+	public static String RUNTIME_TYPE = System.getProperty("fuseRuntimeType", "SpringBoot");
+	public static String CAMEL_VERSION = System.getProperty("fuseCamelVersion", "2.17.0.redhat-630343");
 	public static final String DSL = System.getProperty("fuseDSL", "Blueprint");
 	public static final String STAGING_REPOS = System.getProperty("staging.repositories", "false");
 

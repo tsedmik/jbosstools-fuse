@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.ui.bot.tests;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.eclipse.reddeer.requirements.server.ServerRequirementState.RUNNING;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -35,6 +36,7 @@ import org.jboss.tools.fuse.reddeer.utils.FuseServerManipulator;
 import org.jboss.tools.fuse.reddeer.utils.FuseShellSSH;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -64,6 +66,13 @@ public class DataTransformationDeploymentTest extends DataTransformationDefaultT
 
 	@InjectRequirement
 	private static FuseRequirement serverRequirement;
+
+	@BeforeClass
+	public static void setupConfiguration() {
+		DEPLOYMENT_TYPE = "Standalone";
+		RUNTIME_TYPE = serverRequirement.getConfiguration().getServer().getName().contains("EAP") ? "EAP" : "Karaf";
+		CAMEL_VERSION = serverRequirement.getConfiguration().getCamelVersion();
+	}
 
 	/**
 	 * Cleans up test environment
@@ -101,6 +110,7 @@ public class DataTransformationDeploymentTest extends DataTransformationDefaultT
 	public void testDeployment() {
 
 		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), PROJECT_NAME);
+		assertTrue("The project was not successfuly deployed!", new FuseShellSSH().containsLog("started and consuming from"));
 		copyExample();
 		checkTransformation();
 	}
