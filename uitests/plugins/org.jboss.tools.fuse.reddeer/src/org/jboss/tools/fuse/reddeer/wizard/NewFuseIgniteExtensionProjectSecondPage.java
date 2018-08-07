@@ -53,7 +53,10 @@ public class NewFuseIgniteExtensionProjectSecondPage extends WizardPage {
 	}
 
 	public void setTextVersion(String str) {
-		new LabeledText(this, "Version").setText(str);
+		LabeledText text = new LabeledText(this, "Version");
+		text.setText(str);
+		new LabeledText(this, "Name").setFocus();
+		text.setFocus();
 	}
 
 	public LabeledText getNameTXT() {
