@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
@@ -164,7 +165,7 @@ public class CamelCatalogComponentsTest {
 	public void testComponentPropertiesPresence() {
 		CamelEditor editor = new CamelEditor(CONTEXT);
 		editor.activate();
-		editor.addCamelComponent(component, "Route cbr-route");
+		editor.addCamelComponent(component, "Route cbr-route", TimePeriod.VERY_LONG);
 
 		FusePropertiesView view = new FusePropertiesView();
 		view.open();
