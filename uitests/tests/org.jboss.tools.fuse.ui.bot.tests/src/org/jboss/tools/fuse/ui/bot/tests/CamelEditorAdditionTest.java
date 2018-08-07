@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
+import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.core.util.FileUtil;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanerrorlog.CleanErrorLogRequirement;
@@ -90,7 +91,7 @@ public class CamelEditorAdditionTest {
 		CXF cxf = new CXF(); // CXF component requires dependency in pom.xml
 
 		editor.activate();
-		editor.addCamelComponent(cxf, "Route cbr-route");
+		editor.addCamelComponent(cxf, "Route cbr-route", TimePeriod.VERY_LONG);
 		editor.save();
 		assertPOMDependency(true, CXF_ARTIFACT_ID, "Dependency should has been present in POM.xml file");
 

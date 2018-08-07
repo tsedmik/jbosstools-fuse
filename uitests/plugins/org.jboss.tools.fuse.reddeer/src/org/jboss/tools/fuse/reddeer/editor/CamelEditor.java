@@ -176,11 +176,14 @@ public class CamelEditor extends GEFEditor {
 	 *            Name of a route in Camel Editor
 	 */
 	public void addCamelComponent(CamelComponent component, String route) {
+		addCamelComponent(component, route, TimePeriod.LONG);
+	}
 
+	public void addCamelComponent(CamelComponent component, String route, TimePeriod waitPeriod) {
 		log.debug("Adding '" + component + "' component into '" + route + "' route");
 		Point r = getInEditorCoords(route);
 		addCamelComponent(component, r.x + 10, r.y + 10);
-		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
+		new WaitWhile(new JobIsRunning(), waitPeriod);
 		AbstractWait.sleep(TimePeriod.SHORT);
 	}
 
