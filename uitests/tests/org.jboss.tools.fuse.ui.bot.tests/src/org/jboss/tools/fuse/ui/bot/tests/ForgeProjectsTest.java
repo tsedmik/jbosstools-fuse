@@ -48,7 +48,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
  * <p>
  * Use the following argument to specify type of projects:
  * <ul>
- * <li>-DfuseRuntimeType=... --- "Spring Boot" / Karaf</li>
+ * <li>-DfuseRuntimeType=... --- SpringBoot / Karaf</li>
  * </ul>
  * </p>
  * 
@@ -64,7 +64,7 @@ public class ForgeProjectsTest extends DefaultTest {
 
 	public static final String CHOICE_PROJECT_TYPE = "fuse";
 	public static final String CHOICE_BUILD_SYSTEM = "Maven";
-	public static final String RUNTIME_TYPE = System.getProperty("fuseRuntimeType", "Spring Boot");
+	public static final String RUNTIME_TYPE = System.getProperty("fuseRuntimeType", "SpringBoot");
 	public static final String PROJECT_NAME = "test-forge-project";
 
 	public static final String RESPONSE_PROJECT_NAME = "* Project name:";
@@ -81,9 +81,11 @@ public class ForgeProjectsTest extends DefaultTest {
 	public static final String RESPONSE_ERROR = "***ERROR***";
 	public static final String RESPONSE_PROJECT_CREATED = "***SUCCESS*** Project named '" + PROJECT_NAME
 			+ "' has been created.";
+	public static final String RESPONSE_ADDON_INSTALLED = "***SUCCESS*** Addon org.jboss.fuse.forge.addon:fuse-forge,1.0.0 was installed successfully.";
 
 	public static final String CMD_RETURN = "\n";
 	public static final String CMD_NEW_PROJECT = "project-new \n";
+	public static final String CMD_INSTALL_FUSE = "addon-install --coordinate org.jboss.fuse.forge.addon:fuse-forge,1.0.0 \n";
 
 	private ForgeOption project;
 
@@ -95,6 +97,8 @@ public class ForgeProjectsTest extends DefaultTest {
 		ForgeConsoleView view = new ForgeConsoleView();
 		view.open();
 		view.start();
+		view.setConsoleText(CMD_INSTALL_FUSE);
+		new WaitUntil(new ForgeConsoleHasText(RESPONSE_ADDON_INSTALLED), TimePeriod.LONG);
 		List<ForgeOption> params = getAvailableArchetypes();
 		view.setConsoleText(CMD_RETURN);
 		new WaitUntil(new ForgeConsoleHasText(RESPONSE_ERROR));
@@ -138,7 +142,8 @@ public class ForgeProjectsTest extends DefaultTest {
 		view.setConsoleText(CMD_RETURN);
 		new WaitUntil(new ForgeConsoleHasText(RESPONSE_PROJECT_TYPE2));
 		for (ForgeOption option : view.getOptions()) {
-			if (RUNTIME_TYPE.equals(option.getName())) {
+			if ((RUNTIME_TYPE.equals("SpringBoot") && option.getName().equals("Spring Boot"))
+					|| RUNTIME_TYPE.equals(option.getName())) {
 				view.setConsoleText(option.getNumber() + CMD_RETURN);
 			}
 		}
